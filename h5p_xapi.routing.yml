@@ -1,0 +1,13 @@
+h5p_xapi.ajax_url:
+  path: '/h5p_xapi/xapi/data/process'
+  defaults:
+    _controller: '\Drupal\h5p_xapi\Controller\H5pXapiController::processData'
+  requirements:
+    _permission: 'access content'
+h5p_xapi.admin.config.system.h5p_xapi:
+  path: '/admin/config/system/h5p_xapi'
+  defaults:
+    _form: 'Drupal\h5p_xapi\Form\H5pXapiSettingsForm'
+    _title: 'H5P xAPI Settings'
+  requirements:
+    _permission: 'administer site configuration'

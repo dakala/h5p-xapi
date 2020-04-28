@@ -1,0 +1,5 @@
+h5p_xapi.admin.config.system.h5p_xapi:
+  title: 'H5P xAPI'
+  description: 'Configure H5P xAPI.'
+  parent: system.admin_config_system
+  route_name: h5p_xapi.admin.config.system.h5p_xapi

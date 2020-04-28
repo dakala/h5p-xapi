@@ -1,0 +1,268 @@
+<?php
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function h5p_xapi_uninstall() {
+  // @todo: remove!!!
+  $database = \Drupal::database();
+  $tables = ['h5p_points', 'h5p_content_user_data', 'watchdog'];
+  foreach ($tables as $table) {
+    $database->truncate($table)->execute();
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function h5p_xapi_schema() {
+  $schema[H5P_XAPI_SUMMARY_TABLE] = [
+    'description' => 'Stores a summary of xAPI statements.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: unique ID for records.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'id_actor' => [
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'medium',
+      ],
+      'id_verb' => [
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'medium',
+      ],
+      'id_object' => [
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'medium',
+      ],
+      'id_result' => [
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'medium',
+      ],
+      'time' => [
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'xapi' => [
+        'description' => 'The raw xAPI JSON',
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'default' => '',
+      ],
+    ],
+    'indexes' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema[H5P_XAPI_ACTOR_TABLE] = [
+    'description' => '',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: unique ID for records.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'actor_id' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'actor_name'  => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'actor_members' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'uid' => [
+        'description' => 'The Drupal user ID',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ],
+    ],
+    'indexes' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema[H5P_XAPI_VERB_TABLE] = [
+    'description' => '',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: unique ID for records.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'verb_id' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'verb_display'  => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+    ],
+    'indexes' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema[H5P_XAPI_OBJECT_TABLE] = [
+    'description' => '',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: unique ID for records.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'xobject_id' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'object_name'  => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'object_description' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'object_choices' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'object_correct_responses_pattern' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'h5p_content_id' => [
+        'description' => '',
+        'type' => 'int',
+        'size' => 'medium',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ],
+      'h5p_subcontent_id' => [
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'default' => '',
+      ],
+    ],
+    'indexes' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema[H5P_XAPI_RESULT_TABLE] = [
+    'description' => '',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: unique ID for records.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+//      'id_actor' => [
+//        'description' => '',
+//        'type' => 'int',
+//        'unsigned' => TRUE,
+//        'not null' => FALSE,
+//        'default' => 0,
+//        'size' => 'medium',
+//      ],
+//      'h5p_content_id' => [
+//        'description' => '',
+//        'type' => 'int',
+//        'size' => 'medium',
+//        'unsigned' => TRUE,
+//        'not null' => FALSE,
+//      ],
+      'result_response' => [
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'result_score_raw'  => [
+        'description' => '',
+        'type' => 'int',
+        'not null' => FALSE,
+      ],
+      'result_score_scaled' => [
+        'description' => '',
+        'type' => 'float',
+        'not null' => FALSE,
+      ],
+      'result_completion' => [
+        'description' => 'Boolean indicating whether the activity was completed.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'tiny',
+      ],
+      'result_success' => [
+        'description' => 'Boolean indicating whether the activity participant was successful.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+        'size' => 'tiny',
+      ],
+      'result_duration' => [
+        'description' => '',
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => FALSE,
+      ],
+    ],
+    'indexes' => [
+      'id' => ['id'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+
+}

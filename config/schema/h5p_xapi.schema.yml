@@ -1,0 +1,31 @@
+h5p_xapi.settings:
+  type: config_object
+  label: 'H5P xAPI settings'
+  mapping:
+    content_id_key:
+      type: string
+      label: 'The local Content ID key in the xAPI JSON'
+    sub_content_id_key:
+      type: string
+      label: 'The sub-content ID key in the xAPI JSON'
+    enable_debug:
+      type: boolean
+      label: 'Whether to log xAPI statements to the browser console or not.'
+    store_xapi_statements:
+      type: boolean
+      label: 'Whether to store all raw xAPI statements or not.'
+    capture_all_content_types:
+      type: boolean
+      label: 'Whether to capture all H5P content types or not.'
+    capture_allowed_types:
+      type: sequence
+      label: 'H5P content types allowed for capture'
+      sequence:
+        type: string
+        label: 'H5P Content type'
+    allowed_content_types:
+      type: sequence
+      label: 'Content types allowed to have H5P interactive content'
+      sequence:
+        type: string
+        label: 'Drupal content types'

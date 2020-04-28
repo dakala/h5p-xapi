@@ -1,0 +1,4 @@
+services:
+  h5p_xapi.data:
+    class: Drupal\h5p_xapi\XapiData
+    arguments: []

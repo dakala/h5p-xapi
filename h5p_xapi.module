@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Manages xAPI reporting for H5P.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\h5p\Controller\H5PLibraryAdmin;
+use Drupal\node\NodeInterface;
+
+const H5P_XAPI_ACTOR_TABLE = 'h5p_xapi_actor';
+const H5P_XAPI_VERB_TABLE = 'h5p_xapi_verb';
+const H5P_XAPI_OBJECT_TABLE = 'h5p_xapi_object';
+const H5P_XAPI_RESULT_TABLE = 'h5p_xapi_result';
+const H5P_XAPI_SUMMARY_TABLE = 'h5p_xapi_summary';
+const H5P_LIBRARY_TABLE = 'h5p_libraries';
+const H5P_CONTENT_TABLE = 'h5p_content';
+
+/**
+ * Implements hook_help().
+ */
+function h5p_xapi_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.h5p_xapi':
+      $output = '';
+      $output .= '<h3>' . t('H5P xAPI') . '</h3>';
+      $output .= '<p>' . t('TODO:') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function h5p_xapi_preprocess_page(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  // Not viewing a node.
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  $config = \Drupal::config('h5p_xapi.settings');
+  $allowed_content_types = $config->get('allowed_content_types');
+  // Not viewing a node with H5P content.
+  if (empty($allowed_content_types) || !in_array($node->bundle(), $allowed_content_types))  {
+    return;
+  }
+
+  $h5p_settings = H5PLibraryAdmin::addSettings();
+  $h5p_settings['drupalSettings']['h5p']['drupal_h5p']['H5P']['debugIsEnabled'] = $config->get('enable_debug');
+  $h5p_settings['drupalSettings']['h5p']['drupal_h5p']['H5P']['contentIdKey'] = $config->get('content_id_key');
+  $h5p_settings['drupalSettings']['h5p']['drupal_h5p']['H5P']['subContentIdKey'] = $config->get('sub_content_id_key');
+  // Default to all CTs if there are no allowed types.
+  $h5p_settings['drupalSettings']['h5p']['drupal_h5p']['H5P']['captureAll'] = empty($config->get('capture_allowed_types'));
+  $h5p_settings['drupalSettings']['h5p']['drupal_h5p']['H5P']['captureAllowed'] = $config->get('capture_allowed_types');
+
+  // Attach libraries to page.
+  $variables['#attached']['drupalSettings'] = $h5p_settings['drupalSettings'];
+  $variables['#attached']['library'][] = 'h5p/h5p';
+  $variables['#attached']['library'][] = 'h5p_xapi/h5p_xapi.xapi';
+}

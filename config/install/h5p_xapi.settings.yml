@@ -1,0 +1,7 @@
+content_id_key: 'http://h5p.org/x-api/h5p-local-content-id'
+sub_content_id_key: 'http://h5p.org/x-api/h5p-subContentId'
+enable_debug: false
+store_xapi_statements: true
+capture_all_content_types: false
+capture_allowed_types:
+allowed_content_types:

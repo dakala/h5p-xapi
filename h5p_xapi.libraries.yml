@@ -1,0 +1,4 @@
+h5p_xapi.xapi:
+  js:
+    js/h5p-xapi.js: {}
+
